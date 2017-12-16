@@ -1,0 +1,19 @@
+version: '3'
+services:
+  wikidb:
+    image: mongo
+    expose:
+      - '27017'
+    command: '--smallfiles --logpath=/dev/null'
+    volumes:
+      - ./data/mongo:/data/db
+  wikijs:
+    image: 'requarks/wiki:latest'
+    links:
+      - wikidb
+    ports:
+      - '3000:3000'
+    environment:
+      WIKI_ADMIN_EMAIL: dani@outputs.io
+    volumes:
+      - ./config.yml:/var/wiki/config.yml
